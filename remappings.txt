@@ -1,0 +1,2 @@
+@uniswap/core/=src/uniswap/core/
+@uniswap/periphery/=src/uniswap/periphery/
