@@ -1,2 +1,4 @@
-@uniswap/core/=src/uniswap/core/
+@uniswap/v2-core/=src/uniswap/core/
 @uniswap/periphery/=src/uniswap/periphery/
+@openzeppelin/=lib/openzeppelin-contracts/
+@uniswap/lib/=lib/
