@@ -5,8 +5,9 @@ import "@uniswap/lib/contracts/libraries/TransferHelper.sol";
 
 import "./interfaces/IUniswapV2Router02.sol";
 import "./libraries/UniswapV2Library.sol";
-import "./libraries/SafeMath.sol";
-import "./interfaces/IERC20.sol";
+import "@uniswap/v2-core/contracts/libraries/SafeMath.sol";
+//import "@uniswap/v2-core/contracts/interfaces/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IWETH.sol";
 
 contract UniswapV2Router02 is IUniswapV2Router02 {

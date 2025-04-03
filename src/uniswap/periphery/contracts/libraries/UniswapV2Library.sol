@@ -2,7 +2,9 @@ pragma solidity >=0.5.0;
 
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 
-import "./SafeMath.sol";
+//import "./SafeMath.sol";
+
+import "@uniswap/v2-core/contracts/libraries/SafeMath.sol";
 
 library UniswapV2Library {
     using SafeMath for uint256;
