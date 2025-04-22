@@ -1,5 +1,6 @@
 pragma solidity =0.8.28;
 
+import {Script, console} from "lib/forge-std/src/Script.sol";
 import "./interfaces/IUniswapV2Pair.sol";
 import "./UniswapV2ERC20.sol";
 import "./libraries/Math.sol";
@@ -116,11 +117,15 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
 
     // this low-level function should be called from a contract which performs important safety checks
     function mint(address to) external lock returns (uint256 liquidity) {
+
+        console.log("aaaaaa");
         (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
         uint256 balance0 = IERC20(token0).balanceOf(address(this));
         uint256 balance1 = IERC20(token1).balanceOf(address(this));
         uint256 amount0 = balance0.sub(_reserve0);
         uint256 amount1 = balance1.sub(_reserve1);
+
+        console.log("aaa");
 
         bool feeOn = _mintFee(_reserve0, _reserve1);
         uint256 _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
@@ -130,11 +135,24 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
         } else {
             liquidity = Math.min(amount0.mul(_totalSupply) / _reserve0, amount1.mul(_totalSupply) / _reserve1);
         }
+
+        console.log("bbb");
+
+        console.log("mint: reserveA = ", reserve0);
+        console.log("mint: reserveB = ", reserve1);
+        console.log("mint: balanceA = ", balance0);
+        console.log("mint: balanceB = ", balance1);
+        console.log("mint: liquidity = ", liquidity);
+
         require(liquidity > 0, "UniswapV2: INSUFFICIENT_LIQUIDITY_MINTED");
+
+        console.log("ccc");
         _mint(to, liquidity);
 
         _update(balance0, balance1, _reserve0, _reserve1);
+        console.log("ddd");
         if (feeOn) kLast = uint256(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
+        console.log("eee");
         emit Mint(msg.sender, amount0, amount1);
     }
 
@@ -151,7 +169,7 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
         uint256 _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
         amount0 = liquidity.mul(balance0) / _totalSupply; // using balances ensures pro-rata distribution
         amount1 = liquidity.mul(balance1) / _totalSupply; // using balances ensures pro-rata distribution
-        require(amount0 > 0 && amount1 > 0, "UniswapV2: INSUFFICIENT_LIQUIDITY_BURNED");
+        require(amount0 >= 0 && amount1 >= 0, "UniswapV2: INSUFFICIENT_LIQUIDITY_BURNED");
         _burn(address(this), liquidity);
         _safeTransfer(_token0, to, amount0);
         _safeTransfer(_token1, to, amount1);

@@ -6,6 +6,8 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 
 import "@uniswap/v2-core/contracts/libraries/SafeMath.sol";
 
+import {Script, console} from "lib/forge-std/src/Script.sol";
+
 library UniswapV2Library {
     using SafeMath for uint256;
 
@@ -18,7 +20,9 @@ library UniswapV2Library {
 
     // calculates the CREATE2 address for a pair without making any external calls
     function pairFor(address factory, address tokenA, address tokenB) internal pure returns (address pair) {
+        //console.log("x");
         (address token0, address token1) = sortTokens(tokenA, tokenB);
+        //console.log("y");
         pair = address(
             uint160(
                 uint256(
@@ -27,12 +31,13 @@ library UniswapV2Library {
                             hex"ff",
                             factory,
                             keccak256(abi.encodePacked(token0, token1)),
-                            hex"96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f" // init code hash
+                            hex"392e8f71d7048de3dfeb898481c028844b2c3764e27fc44f05269eecd5f6e38a" // init code hash
                         )
                     )
                 )
             )
         );
+        //console.log("z");
     }
 
     // fetches and sorts the reserves for a pair
@@ -42,8 +47,15 @@ library UniswapV2Library {
         returns (uint256 reserveA, uint256 reserveB)
     {
         (address token0,) = sortTokens(tokenA, tokenB);
+
+        
+
         (uint256 reserve0, uint256 reserve1,) = IUniswapV2Pair(pairFor(factory, tokenA, tokenB)).getReserves();
+
+        
         (reserveA, reserveB) = tokenA == token0 ? (reserve0, reserve1) : (reserve1, reserve0);
+
+        
     }
 
     // given some amount of an asset and pair reserves, returns an equivalent amount of the other asset
